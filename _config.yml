@@ -6,10 +6,10 @@
 title: mervynfang
 subtitle: love Melody
 description: FrontEnd Learning Traving Music Car Sports and Photography 前端 学习 旅行 音乐 汽车 体育 摄影
+keywords: '前端 js vue react javascript ecmascript es6 es2015 es2016 es2017 html html5 developer code coder css css3 开发 程序员 程序猿 编程 webpack koa express babel'
 author: mervynfang
 language: zh-CN
 timezone: Asia/Shanghai
-keywords: '前端 js vue react javascript ecmascript es6 es2015 es2016 es2017 html html5 developer code coder css css3 开发 程序员 程序猿 编程 webpack koa express babel'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -70,7 +70,7 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/MervynFang/blog.git
+  repo: git@github.com:MervynFang/blog.git
   branch: gh-pages
   
 jsonContent:
