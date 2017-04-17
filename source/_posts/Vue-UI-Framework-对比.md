@@ -1,7 +1,7 @@
 ---
 title: Vue UI Framework 对比
 date: 2017-04-17 09:15:35
-tags: FrontEnd
+tags: [FrontEnd]
 ---
 本文链接: http://mervynfang.github.io/blog/2017/04/17/Vue-UI-Framework-%E5%AF%B9%E6%AF%94/
 
