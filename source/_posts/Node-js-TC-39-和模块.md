@@ -15,4 +15,4 @@ tags: [FrontEnd, Translation]
 
 <!-- more -->
 
-我这周参加 TC-39 会议的理由非常简单： 
+我这周参加 TC-39 会议的理由非常简单：一个 TC-39 定义的最新的 Javascript 语言标准，也就是 Modules，给 Node.js 核心团队带来一些麻烦。
