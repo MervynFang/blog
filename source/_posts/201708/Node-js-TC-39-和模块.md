@@ -4,7 +4,7 @@ date: 2017-08-17 11:40:40
 tags: [FrontEnd, Translation]
 ---
 
-本文链接: https://mervynfang.github.io/blog/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+本文链接: http://mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
 
 原文标题: Node.js, TC-39, and Modules
 
@@ -32,11 +32,11 @@ tags: [FrontEnd, Translation]
 
 在 Node.js 刚开始的时候，有一个从非常宽松定义的标准——叫 CommonJS，Node.js 的模块系统就是遵循它的标准的。
 
-<div align=center>![](/blog/assets/static/201708/1.png)</div>
+<div align=center>![](/assets/static/201708/1.png)</div>
 
 简要地说就是一个 JS 文件 export 的标识，比如函数或者变量，将可以被另外一个 JS 文件使用。在 Node.js 里面，这可以通过使用 require() 函数完成。当 Node.js 调用一个类似 require('foo') 的时候，有一个非常特殊的队列步骤在进行。
 
-<div align=center>![](/blog/assets/static/201708/2.png)</div>
+<div align=center>![](/assets/static/201708/2.png)</div>
 
 第一步是把标识符 'foo' 转换成 Node.js 能够读懂的绝对文件路径。这里的处理过程包括多步内部步骤，本质上就是去扫描本地文件系统去匹配对应的原生模块，JS 文件，JSON 文档。这个解析处理步骤的结果是产生一个 'foo' 指定文件的能够被 Node.js 加载和使用的绝对文件路径。
 
@@ -100,7 +100,7 @@ import {m} from “foo”;
 
 我有一个应用依赖于 ECMAScript 模块 A，A 模块依赖于 CommonJS 模块 B。
 
-<div align=center>![](/blog/assets/static/201708/3.png)</div>
+<div align=center>![](/assets/static/201708/3.png)</div>
 
 我的应用（myapp.js）的代码是
 
@@ -132,7 +132,7 @@ module.exports.log = function(msg) {
 
 在绝大多数的使用场景下，这个加载模型是能够很好地运行的。但模块之间又循环依赖的时候，这里就开始有点麻烦了。那些之前使用过 CommonJS 模块循环依赖的人知道，当那些模块加载的顺序不同时有出现一些诡异的边际场景。同样的问题会在 CommonJS 模块和 ECMAScript 模块之间循环依赖的时候存在。
 
-<div align=center>![](/blog/assets/static/201708/4.png)</div>
+<div align=center>![](/assets/static/201708/4.png)</div>
 
 myapp.js 的代码保留和之前一样。但是，A 模块依赖于 B 模块，B 模块也依赖于 A 模块。
 
@@ -167,7 +167,7 @@ export foo () => A.a
 
 另外一个由于 CommonJS 模块和 ECMAScript 模块之间不同导致的限制是，任何 CommonJS 模块在初始执行后的变化对于一个指定命名标识的导入来说并不可用。举个例子，加入 ECMAScript 模块 A 依赖于 CommonJS 模块 B。
 
-<div align=center>![](/blog/assets/static/201708/5.png)</div>
+<div align=center>![](/assets/static/201708/5.png)</div>
 
 假设 B 的代码如下
 

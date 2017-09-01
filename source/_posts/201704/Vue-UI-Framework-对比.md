@@ -4,7 +4,7 @@ date: 2017-04-17 09:15:35
 tags: [FrontEnd]
 ---
 
-本文链接: http://mervynfang.github.io/blog/2017/04/17/201704/Vue-UI-Framework-%E5%AF%B9%E6%AF%94/
+本文链接: http://mervynfang.com/2017/04/17/201704/Vue-UI-Framework-%E5%AF%B9%E6%AF%94/
 
 Vue 2.0 正式版之后，基于 1.x 的许多 Vue UI 框架都做了更新，以适配 Vue 2.x。当然其中也有一些并没有做升级，仍然只兼容 Vue 1.x。其中包括 vue UI 组件开始得比较早的 [VueStrap](https://github.com/yuche/vue-strap "VueStrap") （基于 bootsrap 的 UI 组件 ），还有 [vue-antd](https://github.com/okoala/vue-antd "vue-antd")（基于 ant-design），[vue-desktop](https://github.com/ElemeFE/vue-desktop "vue-desktop")等。
 
@@ -36,20 +36,20 @@ Vue 2.0 正式版之后，基于 1.x 的许多 Vue UI 框架都做了更新，�
 二者都有较为丰富的组件，下列是 datepicker 组件的外观对比
 
 element:
-<div align=center>![](/blog/assets/static/201704/20170216163733.png)</div>
+<div align=center>![](/assets/static/201704/20170216163733.png)</div>
 
 keen-ui:
-<div align=center>![](/blog/assets/static/201704/20170216163748.png)</div>
+<div align=center>![](/assets/static/201704/20170216163748.png)</div>
 
 移动端上，vux 是 vue 与 weui 的结合，因为现有一套视觉规范，所以 vux 的组件的丰富度比较高，功能实现较为完善。并且也与微信原生视觉体验保持一致。而 mint-ui 也是饿了么开发，与 element 的视觉接近，功能点相较于并不是很完善。
 
 vux 有 60 个功能组件，而 mint-ui 只有 30 个左右，所以总体上 vux 要更加强大一点。下面是二者的 swiper 外观对比：
 
 vux:
-<div align=center>![](/blog/assets/static/201704/20170216171103.png)</div>
+<div align=center>![](/assets/static/201704/20170216171103.png)</div>
 
 mint-ui
-<div align=center>![](/blog/assets/static/201704/20170216171131.png)</div>
+<div align=center>![](/assets/static/201704/20170216171131.png)</div>
 
 可见 vux 实现的功能比 mint-ui 更加多，更加完善。
 
