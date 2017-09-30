@@ -1,5 +1,5 @@
 ---
-title: Vue UI Framework 对比
+title: 'Vue UI Framework 对比'
 date: 2017-04-17 09:15:35
 tags: [FrontEnd]
 ---
