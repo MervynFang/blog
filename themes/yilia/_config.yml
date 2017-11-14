@@ -72,6 +72,14 @@ share_jia: true
 #若使用disqus，请在博客config文件中填写disqus_shortname，并关闭多说评论
 duoshuo: false
 
+valine:
+  appid: pG1WQm8S7jgOeB3eD6dYEM8o-gzGzoHsz #Leancloud应用的appId
+  appkey: npS8PoCpikfyXwFv0wKQGAi8 #Leancloud应用的appKey
+  verify: false #验证码
+  notify: false #评论回复提醒
+  avatar: mm #评论列表头像样式：''/mm/identicon/monsterid/wavatar/retro/hide
+  placeholder: any suggestions #评论框占位符
+
 # 样式定制 - 一般不需要修改，除非有很强的定制欲望…
 style:
   # 头像上面的背景颜色

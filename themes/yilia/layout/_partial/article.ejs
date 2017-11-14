@@ -81,15 +81,15 @@
 <%- partial('post/share_addthis') %>
 <% } %>
 
-<% if (!index){ %>
-  <% if (theme.duoshuo && post.comments){ %>
-  <%- partial('post/duoshuo', {
-      key: post.slug,
-      title: post.title,
-      url: config.url+url_for(post.path)
-    }) %>
-  <% } else { %>
-    <div class="duoshuo"></div>
+<% if (!index && post.valine){ %>
+  <% if (theme.valine && theme.valine.appid && theme.valine.appkey){ %>
+    <section id="comments" style="margin:10px;padding:10px;background:#fff;">
+      <%- partial('post/valine', {
+        key: post.slug,
+        title: post.title,
+        url: config.url+url_for(post.path)
+        }) %>
+    </section>
   <% } %>
 <% } %>
 
