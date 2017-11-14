@@ -78,7 +78,7 @@ valine:
   verify: false #验证码
   notify: false #评论回复提醒
   avatar: mm #评论列表头像样式：''/mm/identicon/monsterid/wavatar/retro/hide
-  placeholder: any suggestions #评论框占位符
+  placeholder: 您的评论 #评论框占位符
 
 # 样式定制 - 一般不需要修改，除非有很强的定制欲望…
 style:
