@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="//mervynfang.com">
+  <title>【译】Node.js, TC-39, 和模块 | mervynfang</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+原文标题: Node.js, TC-39, and Modules
+作者: James M Snell
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】Node.js, TC-39, 和模块">
+<meta property="og:url" content="//mervynfang.com/2017/08/17/201708/Node-js-TC-39-和模块/index.html">
+<meta property="og:site_name" content="mervynfang">
+<meta property="og:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+原文标题: Node.js, TC-39, and Modules
+作者: James M Snell
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
+<meta property="og:image" content="//mervynfang.com/assets/static/201708/1.png">
+<meta property="og:image" content="//mervynfang.com/assets/static/201708/2.png">
+<meta property="og:image" content="//mervynfang.com/assets/static/201708/3.png">
+<meta property="og:image" content="//mervynfang.com/assets/static/201708/4.png">
+<meta property="og:image" content="//mervynfang.com/assets/static/201708/5.png">
+<meta property="og:updated_time" content="2018-02-26T18:22:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】Node.js, TC-39, 和模块">
+<meta name="twitter:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+原文标题: Node.js, TC-39, and Modules
+作者: James M Snell
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
+<meta name="twitter:image" content="//mervynfang.com/assets/static/201708/1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="mervynfang" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/assets/img/kongjian.jpg">
+  
+  <link rel="stylesheet" type="text/css" href="/./main.05aabf.css">
+  <style type="text/css">
+  
+    #container.show {
+      background: linear-gradient(200deg,#a0cfe4,#e8c37e);
+    }
+  </style>
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      
+<div class="overlay" style="background: #4d4d4d"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="/assets/img/kongjian.jpg" class="js-avatar">
+		</a>
+		<hgroup>
+		  <h1 class="header-author"><a href="/">mervynfang</a></h1>
+		</hgroup>
+		
+		<p class="header-subtitle">love Melody</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">Home</a></li>
+	        
+				<li><a href="/tags/FrontEnd/">FrontEnd</a></li>
+	        
+				<li><a href="/tags/Daily/">Daily</a></li>
+	        
+				<li><a href="/tags/Travel/">Travel</a></li>
+	        
+				<li><a href="/tags/Thinking/">Thinking</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+    		
+    			
+    			<a q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">ALL POST</a>
+    			
+            
+    			
+    			<a q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">ABOUT ME</a>
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/MervynFang" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/mervynfang" title="weibo"><i class="icon-weibo"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/mervynfang" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      
+<nav id="mobile-nav">
+  	<div class="overlay js-overlay" style="background: #4d4d4d"></div>
+	<div class="btnctn js-mobile-btnctn">
+  		<div class="slider-trigger list" q-on="click: openSlider(e)"><i class="icon icon-sort"></i></div>
+	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="/assets/img/kongjian.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author js-header-author">mervynfang</h1>
+			</hgroup>
+			
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>love Melody<i class="icon icon-quo-right"></i></p>
+			
+			
+			
+				
+			
+				
+			
+				
+			
+				
+			
+				
+			
+			
+			
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/MervynFang" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/mervynfang" title="weibo"><i class="icon-weibo"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/mervynfang" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+				</div>
+			</nav>
+
+			<nav class="header-menu js-header-menu">
+				<ul style="width: 80%">
+				
+				
+					<li style="width: 20%"><a href="/">Home</a></li>
+		        
+					<li style="width: 20%"><a href="/tags/FrontEnd/">FrontEnd</a></li>
+		        
+					<li style="width: 20%"><a href="/tags/Daily/">Daily</a></li>
+		        
+					<li style="width: 20%"><a href="/tags/Travel/">Travel</a></li>
+		        
+					<li style="width: 20%"><a href="/tags/Thinking/">Thinking</a></li>
+		        
+				</ul>
+			</nav>
+		</header>				
+	</div>
+	<div class="mobile-mask" style="display:none" q-show="isShow"></div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-201708/Node-js-TC-39-和模块" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】Node.js, TC-39, 和模块
+    </h1>
+  
+
+        
+        <a href="/2017/08/17/201708/Node-js-TC-39-和模块/" class="archive-article-date">
+  	<time datetime="2017-08-17T03:40:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文链接: <a href="http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/" target="_blank" rel="external">http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/</a></p>
+<p>原文标题: Node.js, TC-39, and Modules</p>
+<p>作者: James M Snell</p>
+<p>原文链接: <a href="https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e" target="_blank" rel="external">https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e</a></p>
+<p>这周我第一次参加 TC-39 会议。如果你没听说过 TC-39，这里可以简单解释下，TC-39 是 ECMA（欧洲计算机制造联合会）中 ECMAScript 语言（或者叫大家更为熟知的 Javascript）的标准制定委员会。在 TC-39 上，Javascript 语言标准的很多微小的细节实现和差异被定案，委员会致力于保持 Javascript 的持续发展以及给满足更多开发者的需求。</p>
+<a id="more"></a>
+<p>我这周参加 TC-39 会议的理由非常简单：一个 TC-39 定义的最新的 Javascript 语言标准，也就是 Modules，给 Node.js 核心团队带来一些麻烦。我们（这里我特指布拉德利·法里亚斯 推特@bradleymeck）已经试图去找出怎么去实现支持 Node.js 的 ECMAScript 模块（下面用 ESM 代指），才不会带来更多的疑惑和麻烦，使它更有价值。</p>
+<p>真正的问题并不在于我们不能按照现在定义的 ES 标准去实现 Node.js 的 ESM，问题在于我们按照标准去做会不符合 Nodejs 开发者的预期，并且给他们带来不好的开发体验。我们非常想要确定 ESM 的实现能够是最佳优化和可用性强的。因为这个问题比较复杂，和 TC-39 的成员坐下来一起面对面讨论相信会是最有效的方式。幸运的是，我觉得我们取得了显著的进展。</p>
+<p>为了使读者能够清楚问题所在，并且将要怎么解决，这里我花点时间解释下那个我们最关心的问题的基本所在。</p>
+<p>首先，一个警告：接下来的内容对于透过代码里面详细的解释会比较简单，这里是因为这篇文章主要是提供一个综述，而不是一篇关于模块系统的深度剖析的论文。</p>
+<p>其次，另一个警告：所有东西都是我对于 TC-39 这次会议的理解，很有可能我说的某些细节是错的，因为随着会议的进行，事情的进展可能会变得跟我这篇文章描述的不一样，这真的很有可能。我写这篇文章只是为了提供会议上被讨论的的东西的记录。</p>
+<h3 id="ECMSScript-模块-vs-CommonJS：或者说…什么是模块？"><a href="#ECMSScript-模块-vs-CommonJS：或者说…什么是模块？" class="headerlink" title="ECMSScript 模块 vs CommonJS：或者说…什么是模块？"></a>ECMSScript 模块 vs CommonJS：或者说…什么是模块？</h3><p>实际上，Node.js 和 TC-39 在什么是模块，怎么定义模块，模块怎么写进内存，模块怎么使用上面有非常不一样的意见。</p>
+<p>在 Node.js 刚开始的时候，有一个从非常宽松定义的标准——叫 CommonJS，Node.js 的模块系统就是遵循它的标准的。</p>
+<div align="center"><img src="/assets/static/201708/1.png" alt=""></div>
+
+<p>简要地说就是一个 JS 文件 export 的标识，比如函数或者变量，将可以被另外一个 JS 文件使用。在 Node.js 里面，这可以通过使用 require() 函数完成。当 Node.js 调用一个类似 require(‘foo’) 的时候，有一个非常特殊的队列步骤在进行。</p>
+<div align="center"><img src="/assets/static/201708/2.png" alt=""></div>
+
+<p>第一步是把标识符 ‘foo’ 转换成 Node.js 能够读懂的绝对文件路径。这里的处理过程包括多步内部步骤，本质上就是去扫描本地文件系统去匹配对应的原生模块，JS 文件，JSON 文档。这个解析处理步骤的结果是产生一个 ‘foo’ 指定文件的能够被 Node.js 加载和使用的绝对文件路径。</p>
+<p>接下来，加载完全取决于解析步骤产生的绝对文件路径指向什么。例如，如果解析地址指向的是 Node.js 原生模块，那就开始加载代码，这中间包括动态引入应用的 Node.js 共享库进入当前的 Node.js 进程。如果指向的是一个 JSON 文件或者 JS 文件，确认文件存在之后，文件的内容被读进内存里。这里应该重点注意加载 JS 代码和执行 JS 代码并不一样。前者只是严格的拉取文件的字符串内容进入内存，后者是将字符串传递给 JS 引擎解析和执行。</p>
+<p>如果加载的是一个 JS 文件，Node.js 现在会假定文件是一个 CommonJS 模块。接下去，Node.js 做的是饱受争议并且许多 Node.js 应用的开发者也经常误解的。在把加载完的 JS 字符串传递给 JS 引擎解析之前，JS 代码被包裹在一个函数里面。</p>
+<p>例如，一个 JS 文件 ‘foo.js’：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> m = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">module</span>.exports.m = m;</span><br></pre></td></tr></table></figure>
+<p>事实上会被 Node.js 解析成为如下的函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params">exports, require, module, __filename, __dirname</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> m = <span class="number">1</span>;</span><br><span class="line">  <span class="built_in">module</span>.exports.m = m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Node.js 使用 JS 运行环境来执行 JS 代码。很多全局的变量，比如 ‘exports’, ‘module’, ‘__filename’, ‘__dirname’，在 Node.js 常常被使用的，其实在 JS 的运行环境中并不是全局变量。当函数被调用时，Node.js 将这些函数作为参数传入包裹的函数。</p>
+<p>包裹的函数本质上是一个工厂函数，exports 对象是一个普通的 JS 对象，包裹函数把对象和属性与 exports 函数连接起来。一旦包裹的函数产生返回值，exports 对象做了缓存，然后把值返回给 <code>require()</code> 函数。</p>
+<p>理解这个讨论的关键概念在于，没有办法提前检测 CommonJS 模块 export 什么东西出来，直到包裹函数被执行后，才能直到确切是什么内容。</p>
+<p>这是 CommonJS 模块和 ECMAScript 模块之间的显著区别。因为 CommonJS 模块的 <code>exports</code> 是在包裹函数被执行的时候定义的，而 ESM 的 exports 是语法上的定义。这意味着，当 JS 代码解析的时候，ESM 的 <code>exports</code> 标识已经被解析，就已经识别为 ESM，不用等到代码被执行的时候才能被判断。</p>
+<p>例如，下面的这个简单的 ECMAScript 模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> m = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>当这段代码被解析的时候，在执行之前，就创建了一个内部的结构叫模块记录。在这个模块记录里面，记录着一些关键的数据，包括一个记录着模块 export 的标识的静态的列表。JS 解析器会通过寻找 <code>export</code> 关键字去识别。由于缺乏更好的表述，这里就说标识吧。模块记录的标识实质上指向的东西是还不存在的，因为代码还没有执行，只有模块记录建立好之后，模块的代码才真正的开始执行。这里面其实有很多细节，但我还是比较模糊不清，这里关键点就是，ESM 会在执行前去检测 export 出来的标识。</p>
+<p>当使用 ECMAScript 模块时，它使用了一个 import 的语句：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;m&#125; <span class="keyword">from</span> “foo”;</span><br></pre></td></tr></table></figure>
+<p>这段代码主要讲，“我将要使用foo模块输出的m标识”。</p>
+<p>这个语句是一个词法定义语句，当代码解析的时候，它用来建立 import 所在的脚本和 ‘foo’ 模块之间的连接。现在的ECMAScript 模块标准写着，这个连接必须在任何代码执行前生效，这意味着，模块的实现必须确保 ‘foo’ 模块确实有输出标识 ‘m’，这样两个 JS 文件才能被执行。</p>
+<p>对于熟悉基于强对象的面向对象编程语言比如 Java 或者 C++ 的人来说，对模块的这么处理应该会觉得容易理解，因为它很想通过一个接口去访问对象。模块输出的标识会在执行前被确认和连接，如果有标识实现不完整，有错误，就会在执行阶段被抛出。</p>
+<p>对于 Node.js 来说，这里有一个挑战，因为 ‘foo’ 模块并不是一个 ECMAScript 模块，是通过词法去定义 export 的，它是一个 CommonJS 模块，是动态去定义 export 的。具体来说，这里当我说，<code>import {m} from “foo”</code>，ECMAScript 模块现在需要在执行前检测 ‘foo’ 模块是否有输出标识 ‘m’。当时，就像我们知道的，因为 ‘foo’ 是一个 CommonJS 模块，这是不可能提前去检测的，因为执行后 m 才被输出。最终的结果就是，在现在定义的 ESM 标准下，ECMAScript 模块的很重要的一项功能，<code>import</code> 和 <code>export</code>，并不能 import CommonJS 模块。</p>
+<p>这对于 Node.js 的开发者来说并不是很理想。所以我们回去 TC-39 问下是否能够在标准上面做些改变。起初，我们其实是有点害怕去问这个问题。但实际上，TC-39 很关心，并且也在标准上面正在做一些改表，以确保 Node.js 能够很好地实现 ECMAScript 模块，使得东西在 Node.js 环境下面运行得很好。</p>
+<h3 id="操作顺序"><a href="#操作顺序" class="headerlink" title="操作顺序"></a>操作顺序</h3><p>一个被提议的确切的改变是对动态定义的模块做出说明。本质上，当我做出 <code>import {m} from “foo”</code> 这样的操作时，结果应该是返回 ‘foo’ 模块不是一个拥有 export 词法定义的 ECMAScript 模块，而不是像现在标准里面做的，直接抛出错误结束。进程应该把 ‘foo’ 模块和导入脚本进入一个待定状态，延迟验证动态模块导入的标识直到动态模块的代码能够被执行。一旦执行了代码，模块记录中关于 CommonJS 模块的就能完成，并且导入的链接也生效。这个 ECMAScript 模块标准的改进允许 <code>export</code> 和 <code>import</code> 的 CommonJS 模块能够工作。（虽然，这里关于循环依赖的边际案例还是会有一些坑存在）</p>
+<p>我们通过一些例子来详细说明。</p>
+<p>我有一个应用依赖于 ECMAScript 模块 A，A 模块依赖于 CommonJS 模块 B。</p>
+<div align="center"><img src="/assets/static/201708/3.png" alt=""></div>
+
+<p>我的应用（myapp.js）的代码是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = <span class="built_in">require</span>(<span class="string">'A'</span>).default</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>A 模块的代码是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;log&#125; <span class="keyword">from</span> <span class="string">"B"</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  log(<span class="string">'hello world'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>B 模块的代码是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports.log = <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我运行 <code>node myapp.js</code> 的时候，调用 <code>require(A)</code> 会检测到加载的是一个 ECMAScript 模块（后面会解释这个是怎么完成的）。与 CommonJS 模块现在使用的包裹函数去加载模块不同，Node.js 会使用 ECMAScript 模块的标准去解析，初始化，和执行 A 模块。当 A 的代码解析后，就产生了模块记录，它会检测 B 不是一个 ECMAScript 模块，所以校验的步骤在校验 B 导出的日志之后，就会进入待定状态。ECMAScript 模块加载器就会开始它的执行阶段。这个阶段将首先使用现有的 CommonJS 包裹函数来执行 B 模块，其执行结果将传递回 ECMAScript 模块加载器，以完成模块记录的构造。其次，它将会根据完整的模块记录来执行 A 模块的代码。</p>
+<p>关于交换依赖的顺序。就是 A 模块是一个 CommonJS 模块而 B 模块是一个 ECMAScript 模块。这里的话一切都工作正常，就像上面有插图的例子一样，ECMAScript 模块能够去 <code>require()</code> CommonJS 模块。</p>
+<p>在绝大多数的使用场景下，这个加载模型是能够很好地运行的。但模块之间又循环依赖的时候，这里就开始有点麻烦了。那些之前使用过 CommonJS 模块循环依赖的人知道，当那些模块加载的顺序不同时有出现一些诡异的边际场景。同样的问题会在 CommonJS 模块和 ECMAScript 模块之间循环依赖的时候存在。</p>
+<div align="center"><img src="/assets/static/201708/4.png" alt=""></div>
+
+<p>myapp.js 的代码保留和之前一样。但是，A 模块依赖于 B 模块，B 模块也依赖于 A 模块。</p>
+<p>A 模块的代码是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b = <span class="built_in">require</span>(<span class="string">'B'</span>)</span><br><span class="line">exports.b = b.foo()</span><br><span class="line">exports.a = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>B 模块的代码是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports.log = <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然这是一个相当特殊的人为举例的场景，主要是为了说明问题所在。这种循环变得非常不可能实现。当 ECMAScript 模块 B 被连接和执行后，<code>&quot;a&quot;</code> 标识仍然没有被定义和被 CommonJS 模块 A 导出。这种场景下应该被处理成一个引用错误。</p>
+<p>但是，如果我们把 B 模块换成下面的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> A <span class="keyword">from</span> “A”</span><br><span class="line"><span class="keyword">export</span> foo () =&gt; A.a</span><br></pre></td></tr></table></figure>
+<p>这个循环依赖就能够正常工作，因为当一个 CommonJS 模块被使用一个 <code>import</code> 语句导入是，<code>module.exports</code> 变成 <code>default</code> 导出。这个场景下，ECMAScript 模块连接的是导出的 <code>default</code> 而非一个标识。</p>
+<p>更简洁地说，指定命名标识的从 CommonJS 模块导入只有在 ECMAScript 模块和 CommonJS 模块之间没有循环依赖的时候才能正常工作。</p>
+<p>另外一个由于 CommonJS 模块和 ECMAScript 模块之间不同导致的限制是，任何 CommonJS 模块在初始执行后的变化对于一个指定命名标识的导入来说并不可用。举个例子，加入 ECMAScript 模块 A 依赖于 CommonJS 模块 B。</p>
+<div align="center"><img src="/assets/static/201708/5.png" alt=""></div>
+
+<p>假设 B 的代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports.foo = <span class="function"><span class="keyword">function</span>(<span class="params">name, key</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">module</span>.exports[name] = key</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当模块 B 被 模块 A 导入时，唯一导出的能够用来做命名引用的有效标识就是 <code>default</code> 和 <code>foo</code>。没有其他的标识会被加到 <code>module.exports</code> 上，当调用函数 foo 后，命名引用就开始生效了。它们通过 <code>default</code> 导出的话就会一直生效了。就像下面的代码一样，就会正常地工作了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;foo&#125; <span class="keyword">from</span> “B”</span><br><span class="line"><span class="keyword">import</span> B <span class="keyword">from</span> <span class="string">"B"</span></span><br><span class="line">foo(<span class="string">"abc"</span>, <span class="number">123</span>)</span><br><span class="line"><span class="keyword">if</span> (B.abc === <span class="number">123</span>) &#123; <span class="comment">/** ... **/</span> &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="require-vs-import"><a href="#require-vs-import" class="headerlink" title="require() vs import"></a>require() vs import</h3><p><code>require()</code> 和 <code>import</code> 之间有一个非常清晰的区别：就是我们可以用 <code>require()</code> 来加载一个 ECMAScript 模块，也可以用 <code>import</code> 来导入一个 CommonJS 模块，但是却不可以在 CommonJS 模块里面用 <code>import</code>，同样的，<code>require()</code> 也默认不能在 ECMAScript 模块里面使用。</p>
+<p>换句话说，如果我有一个 CommonJS 模块 A，那么下面的代码就是不能执行的，因为 <code>import</code> 语句不能再 CommonJS 模块里面使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b = <span class="built_in">require</span>(‘B’)</span><br><span class="line"><span class="keyword">import</span> c <span class="keyword">from</span> <span class="string">"C"</span></span><br></pre></td></tr></table></figure>
+<p>如果你在 CommonJS 模块里面操作，正确的方式就是使用 <code>require</code> 去加载和使用一个 ECMAScript 模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b = <span class="built_in">require</span>(‘B’)</span><br><span class="line"><span class="keyword">const</span> c = <span class="built_in">require</span>(<span class="string">'C'</span>)</span><br></pre></td></tr></table></figure>
+<p>在一个 ECMAScript 模块里面，只有在特别地从原生导入之后，<code>require()</code> 才能生效和被使用。导入 <code>require()</code> 必须检测到特定的标识符，但是本质上它一般是这样的东西：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;<span class="built_in">require</span>&#125; <span class="keyword">from</span> “nodejs”</span><br><span class="line"><span class="built_in">require</span>(“foo”)</span><br></pre></td></tr></table></figure>
+<p>但是，因为能够直接通过 <code>import</code> 去导入一个 CommonJS 模块，所以只有非常少的情况下会去这么做。</p>
+<p>另外一点：Node.js 成员有其他的一些想法，例如加载一个 ECMAScript 模块是否必须是异步的，因为这样会要求在整个依赖图表里面使用 Promise。TC-39 向我们保证（包括上面描述的改变也允许）加载不必须是异步的。这是一件好事。</p>
+<p><strong>import() 怎么样</strong></p>
+<p>在 TC-39 会议之前有一个提议提出来了，就是引进一个新的 <code>import()</code> 函数。这个就跟上面的例子里面的 <code>import</code> 语句展示的明显不一样了。看下下面的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;foo&#125; <span class="keyword">from</span> “bar”</span><br><span class="line"><span class="keyword">import</span>(“baz”).then(<span class="function">(<span class="params"><span class="built_in">module</span></span>)=&gt;</span>&#123;<span class="comment">/*…*/</span>&#125;).catch(<span class="function">(<span class="params">err</span>)=&gt;</span>&#123;<span class="comment">/**…*/</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>第一个 <code>import</code> 语句是词法上的定义。就像之前说的，它在代码解析的时候就已经被处理和确认。而 <code>import()</code> 函数不同，则是在运行代码的时候才被处理。它也可以 <code>import</code> ECMAScript 模块（或者 CommonJS 模块），但是，像现在 Node.js 里面的 <code>require()</code> 方法一样，完全在代码运行的时候执行。但不像 <code>require()</code> 函数，<code>import()</code> 函数返回一个 <code>Promise</code>，允许（但不要求）加载相关的模块完全异步地进行。</p>
+<p>由于 <code>import()</code> 函数返回一个 <code>Promise</code>，像 <code>await import(&#39;foo&#39;)</code> 这样的代码就可能出现了。但是，很重要的是 <code>import()</code> 在 TC-39 内还远远没有完整，现在也还不成熟。同时，Node.js 能否完全实现使用 <code>import()</code> 函数异步加载模块也还不是很清楚。</p>
+<h3 id="检测CommonJS-vs-ESM"><a href="#检测CommonJS-vs-ESM" class="headerlink" title="检测CommonJS vs. ESM"></a>检测CommonJS vs. ESM</h3><p>在代码是否使用 <code>require()</code>, <code>import</code>, <code>import()</code> 来加载模块前，很重要的是，要能够先检测导入的是什么类型的模块，这样 Node.js 才能够知道恰当的加载和处理它的方式。</p>
+<p>按照惯例，Node.js <code>require()</code> 函数的实现是依赖于文件扩展名去区分怎么加载不同类型的文件。例如，*.node 文件被加载成原生模块，*.json 文件简单地通过 <code>JSON.parse</code> 传递，*.js 文件则被处理成 CommonJS 模块。</p>
+<p>根据 ECMAScript 模块的介绍，需要一种机制来区分 CommonJS 模块和 ECMAScript 模块。这里有几种建议的方法。</p>
+<p>一种方式是确保一个 JS 文件能够被清楚地解析成或者一个 ECMAScript 模块或者其他的东西，换句话说，当我解析一段 JS，它是不是一个 ESM 应该是非常显而易见的，这种方法叫做“无歧义文法”。不幸的是，它要实现会有点棘手。</p>
+<p>另一种被考虑的方式是在 <code>package.json</code> 文件里面添加元数据。如果 <code>package.json</code> 文件里有一些特定的值，那么它将被加载成 ECMAScipt 模块，而不是 CommonJS 模块。</p>
+<p>第三种方式是使用一种新的文件扩展名（*.mjs）来认定是 ECMAScript 模块。这种方式是最贴近于 Node.js 现在已经做的事情的。</p>
+<p>例如，假设我有一个应用的代码 <code>myapp.js</code> 和一个定义在分离的文件的 ECMAScript 模块。</p>
+<p>使用无歧义文法的方式，则 Node.js 需要能够去解析第二个文件的 JS 代码，并且自动判定它是使用 ECMAScript 模块。在这种方式中，ECMAScript 模块文件能够使用 *.js 文件扩展名，然后也能正常地运行。就像我说的，无歧义文法想要做的正确有点棘手，还有很多边际场景使得它很难实现。</p>
+<p>使用 <code>package.json</code> 的方式，则 ECMAScript 模块必须被打包在它自己的目录里面（本质上是它自己的包）或者包的根目录必须有一个包含着一些元数据的 <code>package.json</code> 文件，元数据需要能够指明哪些 JS 包含着 ECMAScript 模块实际上是一个 ECMAScript 模块。这种方式不是很理想，因为需要对 <code>package.json</code> 文件做附加的操作。</p>
+<p>使用 *.mjs 文件扩展名的方式，ECMAScript 模块的代码会被放进一个特定的文件例如 <code>foo.mjs</code>。在 Node.js 解析标识符成为文件的绝对路径后，<br>它会开始查找文件的扩展名，就像现在它对原生扩展和 JSON 文件处理的一样。如果它判断是 *.mjs 文件扩展名，它就知道当做一个 ECMAScript 模块加载和处理。如果它判断是 *.js，就会降级处理加载成一个 CommonJS 模块。</p>
+<h3 id="幂等性的考量"><a href="#幂等性的考量" class="headerlink" title="幂等性的考量"></a>幂等性的考量</h3><p>一般来说，重复调用 <code>require(&#39;foo&#39;)</code> 多次会返回完全相同的模块的实例。但是，返回的对象不是不可变的，它可以被其他模块更新，被一些方法或者标识补丁替换，甚至被替换整个函数。这种事情现在在 Node.js 生态圈中非常普遍存在。</p>
+<p>例如，假设 myapp.js 有两个依赖 A 和 B。它们都是 CommonJS 模块。A 为了扩展它也依赖于 B。</p>
+<p>myapp.js 的代码是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> A = <span class="built_in">require</span>(<span class="string">'A'</span>)</span><br><span class="line"><span class="keyword">const</span> B = <span class="built_in">require</span>(<span class="string">'B'</span>)</span><br><span class="line">B.foo()</span><br></pre></td></tr></table></figure>
+<p>A 的代码是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> B = <span class="built_in">require</span>(‘B’)</span><br><span class="line"><span class="keyword">const</span> foo = B.foo</span><br><span class="line">B.foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'intercepted!'</span>)</span><br><span class="line">  foo()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>B 的代码是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports.foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'foo bar baz'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个案例里面，在 A 里面调用 <code>require(&#39;B&#39;)</code> 返回与 myapp.js 里面调用 <code>require(&#39;B&#39;)</code> 不一样的结果。</p>
+<p>如果使用 ECMAScript 模块，这种模块间的互相干扰也不是很容易解决。理由是双重的：首先，引用是在运行前完成连接的；其次，引用需要是幂等性的——即在一个给定的上下文中，每次调用都会返回相同的不可变的标识。在实际情况下，这个意味着，当使用命名引用是，ES 模块 A 不能轻易地去改变 ES 模块 B。</p>
+<p>这个规则对下面的 myapp.js 的代码有同样的影响：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> B = <span class="built_in">require</span>(<span class="string">'B'</span>)</span><br><span class="line"><span class="keyword">const</span> foo = B.foo</span><br><span class="line"><span class="keyword">const</span> A = <span class="built_in">require</span>(<span class="string">'A'</span>)</span><br><span class="line">foo()</span><br></pre></td></tr></table></figure>
+<p>这里，A 模块依然更新 B 模块的函数 foo，但因为 foo 的引用已经在那个更新之前捕获了，调用函数 <code>foo()</code> 就是调用原来的函数而不失更新后的那个。在一个 ES 模块里面，没有办法能够引用能够被 A 更新过的模块 B。</p>
+<p>这个幂等性的规则导致的问题还有很有其他各种各样的场景。mock，APM 和 为了测试的监控是最主要的例子。幸运的是，有很多方式能够去处理这种局限性。一种方式是增加加载阶段的钩子函数，允许一个 ES 模块的导出能够被包裹。另一个是让 TC-39 允许加载后的 ES 模块能够被替换。有几种机制在这里被考虑。好消息是拦截 ES 模块跟拦截 CommonJS 模块不一样，ES 模块能够被拦截。</p>
+<h3 id="还有很多要做"><a href="#还有很多要做" class="headerlink" title="还有很多要做"></a>还有很多要做</h3><p>还有一大堆工作要去做，上面讨论的任何东西在任何情况下都还不是最终定下来的。很多细节都要去解决，事情到最后看起来很可能会非常一样。重要的是 Node.js 和 TC-39 现在一起工作去解决所有的这些问题，这是在正确的方向上迈出的优秀的受欢迎的一步。</p>
+<hr>
+<p><strong>译者按</strong></p>
+<p>原文写于 2016 年 9 月份，今年 4 月份原文作者又写了一篇文章关于 Node.js 里的 ES 模块的一次更新——<a href="https://medium.com/the-node-js-collection/an-update-on-es6-modules-in-node-js-42c958b890c" target="_blank" rel="external">An Update on ES6 Modules in Node.js</a>。当时译者准备对此文进行翻译但是凹凸实验室已经做了很好的翻译了，特此附上链接——<a href="https://aotu.io/notes/2017/04/22/an-update-on-es6-modules-in-node-js/" target="_blank" rel="external">【译】关于 Node.js 里 ES6 Modules 的一次更新说明</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">FrontEnd</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Translation</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://mervynfang.com/2017/08/17/201708/Node-js-TC-39-和模块/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/08/30/201708/旅行的意义/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          旅行的意义
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/17/201704/Vue-UI-Framework-对比/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Vue UI Framework 对比</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <section id="comments" style="margin:10px;padding:10px;background:#fff;">
+      <div id="vcomment" class="comment"></div> 
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  var verify = 'false' == 'true' ? true : false
+  var notify = 'false' == 'true' ? true : false
+
+  window.onload = function() {
+    new Valine({
+      el: '.comment',
+      verify: verify,
+      notify: notify,
+      app_id: "pG1WQm8S7jgOeB3eD6dYEM8o-gzGzoHsz",
+      app_key: "npS8PoCpikfyXwFv0wKQGAi8",
+      placeholder: "您的评论",
+      avatar: "mm",
+      guest_info: ['nick', 'mail']
+    })
+  }
+</script>
+    </section>
+  
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2018 mervynfang
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a>
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true,
+		showTags: false
+	}
+</script>
+
+<script>!function(t){function n(r){if(e[r])return e[r].exports;var o=e[r]={exports:{},id:r,loaded:!1};return t[r].call(o.exports,o,o.exports,n),o.loaded=!0,o.exports}var e={};return n.m=t,n.c=e,n.p="./",n(0)}([function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}function o(t,n){var e=/\/|index.html/g;return t.replace(e,"")===n.replace(e,"")}function i(){for(var t=document.querySelectorAll(".js-header-menu li a"),n=window.location.pathname,e=0,r=t.length;e<r;e++){var i=t[e];o(n,i.getAttribute("href"))&&(0,d.default)(i,"active")}}function u(t){for(var n=t.offsetLeft,e=t.offsetParent;null!==e;)n+=e.offsetLeft,e=e.offsetParent;return n}function f(t){for(var n=t.offsetTop,e=t.offsetParent;null!==e;)n+=e.offsetTop,e=e.offsetParent;return n}function c(t,n,e,r,o){var i=u(t),c=f(t)-n;if(c-e<=o){var a=t.$newDom;a||(a=t.cloneNode(!0),(0,h.default)(t,a),t.$newDom=a,a.style.position="fixed",a.style.top=(e||c)+"px",a.style.left=i+"px",a.style.zIndex=r||2,a.style.width="100%",a.style.color="#fff"),a.style.visibility="visible",t.style.visibility="hidden"}else{t.style.visibility="visible";var s=t.$newDom;s&&(s.style.visibility="hidden")}}function a(){var t=document.querySelector(".js-overlay"),n=document.querySelector(".js-header-menu");c(t,document.body.scrollTop,-63,2,0),c(n,document.body.scrollTop,1,3,0)}function s(){document.querySelector("#container").addEventListener("scroll",function(t){a()}),window.addEventListener("scroll",function(t){a()}),a()}function l(){x.default.versions.mobile&&window.screen.width<800&&(i(),s())}var p=e(71),d=r(p),v=e(72),y=(r(v),e(84)),h=r(y),b=e(69),x=r(b),g=e(75),m=r(g),w=e(70);l(),(0,w.addLoadEvent)(function(){m.default.init()}),t.exports={}},function(t,n){var e=t.exports="undefined"!=typeof window&&window.Math==Math?window:"undefined"!=typeof self&&self.Math==Math?self:Function("return this")();"number"==typeof __g&&(__g=e)},function(t,n){var e={}.hasOwnProperty;t.exports=function(t,n){return e.call(t,n)}},function(t,n,e){var r=e(49),o=e(15);t.exports=function(t){return r(o(t))}},function(t,n,e){t.exports=!e(8)(function(){return 7!=Object.defineProperty({},"a",{get:function(){return 7}}).a})},function(t,n,e){var r=e(6),o=e(12);t.exports=e(4)?function(t,n,e){return r.f(t,n,o(1,e))}:function(t,n,e){return t[n]=e,t}},function(t,n,e){var r=e(10),o=e(30),i=e(24),u=Object.defineProperty;n.f=e(4)?Object.defineProperty:function(t,n,e){if(r(t),n=i(n,!0),r(e),o)try{return u(t,n,e)}catch(t){}if("get"in e||"set"in e)throw TypeError("Accessors not supported!");return"value"in e&&(t[n]=e.value),t}},function(t,n,e){var r=e(22)("wks"),o=e(13),i=e(1).Symbol,u="function"==typeof i,f=t.exports=function(t){return r[t]||(r[t]=u&&i[t]||(u?i:o)("Symbol."+t))};f.store=r},function(t,n){t.exports=function(t){try{return!!t()}catch(t){return!0}}},function(t,n,e){var r=e(35),o=e(16);t.exports=Object.keys||function(t){return r(t,o)}},function(t,n,e){var r=e(11);t.exports=function(t){if(!r(t))throw TypeError(t+" is not an object!");return t}},function(t,n){t.exports=function(t){return"object"==typeof t?null!==t:"function"==typeof t}},function(t,n){t.exports=function(t,n){return{enumerable:!(1&t),configurable:!(2&t),writable:!(4&t),value:n}}},function(t,n){var e=0,r=Math.random();t.exports=function(t){return"Symbol(".concat(void 0===t?"":t,")_",(++e+r).toString(36))}},function(t,n){var e=t.exports={version:"2.4.0"};"number"==typeof __e&&(__e=e)},function(t,n){t.exports=function(t){if(void 0==t)throw TypeError("Can't call method on  "+t);return t}},function(t,n){t.exports="constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")},function(t,n){t.exports={}},function(t,n){t.exports=!0},function(t,n){n.f={}.propertyIsEnumerable},function(t,n,e){var r=e(6).f,o=e(2),i=e(7)("toStringTag");t.exports=function(t,n,e){t&&!o(t=e?t:t.prototype,i)&&r(t,i,{configurable:!0,value:n})}},function(t,n,e){var r=e(22)("keys"),o=e(13);t.exports=function(t){return r[t]||(r[t]=o(t))}},function(t,n,e){var r=e(1),o="__core-js_shared__",i=r[o]||(r[o]={});t.exports=function(t){return i[t]||(i[t]={})}},function(t,n){var e=Math.ceil,r=Math.floor;t.exports=function(t){return isNaN(t=+t)?0:(t>0?r:e)(t)}},function(t,n,e){var r=e(11);t.exports=function(t,n){if(!r(t))return t;var e,o;if(n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;if("function"==typeof(e=t.valueOf)&&!r(o=e.call(t)))return o;if(!n&&"function"==typeof(e=t.toString)&&!r(o=e.call(t)))return o;throw TypeError("Can't convert object to primitive value")}},function(t,n,e){var r=e(1),o=e(14),i=e(18),u=e(26),f=e(6).f;t.exports=function(t){var n=o.Symbol||(o.Symbol=i?{}:r.Symbol||{});"_"==t.charAt(0)||t in n||f(n,t,{value:u.f(t)})}},function(t,n,e){n.f=e(7)},function(t,n,e){var r=e(1),o=e(14),i=e(46),u=e(5),f="prototype",c=function(t,n,e){var a,s,l,p=t&c.F,d=t&c.G,v=t&c.S,y=t&c.P,h=t&c.B,b=t&c.W,x=d?o:o[n]||(o[n]={}),g=x[f],m=d?r:v?r[n]:(r[n]||{})[f];d&&(e=n);for(a in e)s=!p&&m&&void 0!==m[a],s&&a in x||(l=s?m[a]:e[a],x[a]=d&&"function"!=typeof m[a]?e[a]:h&&s?i(l,r):b&&m[a]==l?function(t){var n=function(n,e,r){if(this instanceof t){switch(arguments.length){case 0:return new t;case 1:return new t(n);case 2:return new t(n,e)}return new t(n,e,r)}return t.apply(this,arguments)};return n[f]=t[f],n}(l):y&&"function"==typeof l?i(Function.call,l):l,y&&((x.virtual||(x.virtual={}))[a]=l,t&c.R&&g&&!g[a]&&u(g,a,l)))};c.F=1,c.G=2,c.S=4,c.P=8,c.B=16,c.W=32,c.U=64,c.R=128,t.exports=c},function(t,n){var e={}.toString;t.exports=function(t){return e.call(t).slice(8,-1)}},function(t,n,e){var r=e(11),o=e(1).document,i=r(o)&&r(o.createElement);t.exports=function(t){return i?o.createElement(t):{}}},function(t,n,e){t.exports=!e(4)&&!e(8)(function(){return 7!=Object.defineProperty(e(29)("div"),"a",{get:function(){return 7}}).a})},function(t,n,e){"use strict";var r=e(18),o=e(27),i=e(36),u=e(5),f=e(2),c=e(17),a=e(51),s=e(20),l=e(58),p=e(7)("iterator"),d=!([].keys&&"next"in[].keys()),v="@@iterator",y="keys",h="values",b=function(){return this};t.exports=function(t,n,e,x,g,m,w){a(e,n,x);var O,S,_,j=function(t){if(!d&&t in A)return A[t];switch(t){case y:return function(){return new e(this,t)};case h:return function(){return new e(this,t)}}return function(){return new e(this,t)}},P=n+" Iterator",E=g==h,M=!1,A=t.prototype,T=A[p]||A[v]||g&&A[g],L=T||j(g),N=g?E?j("entries"):L:void 0,C="Array"==n?A.entries||T:T;if(C&&(_=l(C.call(new t)),_!==Object.prototype&&(s(_,P,!0),r||f(_,p)||u(_,p,b))),E&&T&&T.name!==h&&(M=!0,L=function(){return T.call(this)}),r&&!w||!d&&!M&&A[p]||u(A,p,L),c[n]=L,c[P]=b,g)if(O={values:E?L:j(h),keys:m?L:j(y),entries:N},w)for(S in O)S in A||i(A,S,O[S]);else o(o.P+o.F*(d||M),n,O);return O}},function(t,n,e){var r=e(10),o=e(55),i=e(16),u=e(21)("IE_PROTO"),f=function(){},c="prototype",a=function(){var t,n=e(29)("iframe"),r=i.length,o="<",u=">";for(n.style.display="none",e(48).appendChild(n),n.src="javascript:",t=n.contentWindow.document,t.open(),t.write(o+"script"+u+"document.F=Object"+o+"/script"+u),t.close(),a=t.F;r--;)delete a[c][i[r]];return a()};t.exports=Object.create||function(t,n){var e;return null!==t?(f[c]=r(t),e=new f,f[c]=null,e[u]=t):e=a(),void 0===n?e:o(e,n)}},function(t,n,e){var r=e(35),o=e(16).concat("length","prototype");n.f=Object.getOwnPropertyNames||function(t){return r(t,o)}},function(t,n){n.f=Object.getOwnPropertySymbols},function(t,n,e){var r=e(2),o=e(3),i=e(45)(!1),u=e(21)("IE_PROTO");t.exports=function(t,n){var e,f=o(t),c=0,a=[];for(e in f)e!=u&&r(f,e)&&a.push(e);for(;n.length>c;)r(f,e=n[c++])&&(~i(a,e)||a.push(e));return a}},function(t,n,e){t.exports=e(5)},function(t,n,e){var r=e(15);t.exports=function(t){return Object(r(t))}},function(t,n,e){t.exports={default:e(41),__esModule:!0}},function(t,n,e){t.exports={default:e(42),__esModule:!0}},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}n.__esModule=!0;var o=e(39),i=r(o),u=e(38),f=r(u),c="function"==typeof f.default&&"symbol"==typeof i.default?function(t){return typeof t}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":typeof t};n.default="function"==typeof f.default&&"symbol"===c(i.default)?function(t){return"undefined"==typeof t?"undefined":c(t)}:function(t){return t&&"function"==typeof f.default&&t.constructor===f.default&&t!==f.default.prototype?"symbol":"undefined"==typeof t?"undefined":c(t)}},function(t,n,e){e(65),e(63),e(66),e(67),t.exports=e(14).Symbol},function(t,n,e){e(64),e(68),t.exports=e(26).f("iterator")},function(t,n){t.exports=function(t){if("function"!=typeof t)throw TypeError(t+" is not a function!");return t}},function(t,n){t.exports=function(){}},function(t,n,e){var r=e(3),o=e(61),i=e(60);t.exports=function(t){return function(n,e,u){var f,c=r(n),a=o(c.length),s=i(u,a);if(t&&e!=e){for(;a>s;)if(f=c[s++],f!=f)return!0}else for(;a>s;s++)if((t||s in c)&&c[s]===e)return t||s||0;return!t&&-1}}},function(t,n,e){var r=e(43);t.exports=function(t,n,e){if(r(t),void 0===n)return t;switch(e){case 1:return function(e){return t.call(n,e)};case 2:return function(e,r){return t.call(n,e,r)};case 3:return function(e,r,o){return t.call(n,e,r,o)}}return function(){return t.apply(n,arguments)}}},function(t,n,e){var r=e(9),o=e(34),i=e(19);t.exports=function(t){var n=r(t),e=o.f;if(e)for(var u,f=e(t),c=i.f,a=0;f.length>a;)c.call(t,u=f[a++])&&n.push(u);return n}},function(t,n,e){t.exports=e(1).document&&document.documentElement},function(t,n,e){var r=e(28);t.exports=Object("z").propertyIsEnumerable(0)?Object:function(t){return"String"==r(t)?t.split(""):Object(t)}},function(t,n,e){var r=e(28);t.exports=Array.isArray||function(t){return"Array"==r(t)}},function(t,n,e){"use strict";var r=e(32),o=e(12),i=e(20),u={};e(5)(u,e(7)("iterator"),function(){return this}),t.exports=function(t,n,e){t.prototype=r(u,{next:o(1,e)}),i(t,n+" Iterator")}},function(t,n){t.exports=function(t,n){return{value:n,done:!!t}}},function(t,n,e){var r=e(9),o=e(3);t.exports=function(t,n){for(var e,i=o(t),u=r(i),f=u.length,c=0;f>c;)if(i[e=u[c++]]===n)return e}},function(t,n,e){var r=e(13)("meta"),o=e(11),i=e(2),u=e(6).f,f=0,c=Object.isExtensible||function(){return!0},a=!e(8)(function(){return c(Object.preventExtensions({}))}),s=function(t){u(t,r,{value:{i:"O"+ ++f,w:{}}})},l=function(t,n){if(!o(t))return"symbol"==typeof t?t:("string"==typeof t?"S":"P")+t;if(!i(t,r)){if(!c(t))return"F";if(!n)return"E";s(t)}return t[r].i},p=function(t,n){if(!i(t,r)){if(!c(t))return!0;if(!n)return!1;s(t)}return t[r].w},d=function(t){return a&&v.NEED&&c(t)&&!i(t,r)&&s(t),t},v=t.exports={KEY:r,NEED:!1,fastKey:l,getWeak:p,onFreeze:d}},function(t,n,e){var r=e(6),o=e(10),i=e(9);t.exports=e(4)?Object.defineProperties:function(t,n){o(t);for(var e,u=i(n),f=u.length,c=0;f>c;)r.f(t,e=u[c++],n[e]);return t}},function(t,n,e){var r=e(19),o=e(12),i=e(3),u=e(24),f=e(2),c=e(30),a=Object.getOwnPropertyDescriptor;n.f=e(4)?a:function(t,n){if(t=i(t),n=u(n,!0),c)try{return a(t,n)}catch(t){}if(f(t,n))return o(!r.f.call(t,n),t[n])}},function(t,n,e){var r=e(3),o=e(33).f,i={}.toString,u="object"==typeof window&&window&&Object.getOwnPropertyNames?Object.getOwnPropertyNames(window):[],f=function(t){try{return o(t)}catch(t){return u.slice()}};t.exports.f=function(t){return u&&"[object Window]"==i.call(t)?f(t):o(r(t))}},function(t,n,e){var r=e(2),o=e(37),i=e(21)("IE_PROTO"),u=Object.prototype;t.exports=Object.getPrototypeOf||function(t){return t=o(t),r(t,i)?t[i]:"function"==typeof t.constructor&&t instanceof t.constructor?t.constructor.prototype:t instanceof Object?u:null}},function(t,n,e){var r=e(23),o=e(15);t.exports=function(t){return function(n,e){var i,u,f=String(o(n)),c=r(e),a=f.length;return c<0||c>=a?t?"":void 0:(i=f.charCodeAt(c),i<55296||i>56319||c+1===a||(u=f.charCodeAt(c+1))<56320||u>57343?t?f.charAt(c):i:t?f.slice(c,c+2):(i-55296<<10)+(u-56320)+65536)}}},function(t,n,e){var r=e(23),o=Math.max,i=Math.min;t.exports=function(t,n){return t=r(t),t<0?o(t+n,0):i(t,n)}},function(t,n,e){var r=e(23),o=Math.min;t.exports=function(t){return t>0?o(r(t),9007199254740991):0}},function(t,n,e){"use strict";var r=e(44),o=e(52),i=e(17),u=e(3);t.exports=e(31)(Array,"Array",function(t,n){this._t=u(t),this._i=0,this._k=n},function(){var t=this._t,n=this._k,e=this._i++;return!t||e>=t.length?(this._t=void 0,o(1)):"keys"==n?o(0,e):"values"==n?o(0,t[e]):o(0,[e,t[e]])},"values"),i.Arguments=i.Array,r("keys"),r("values"),r("entries")},function(t,n){},function(t,n,e){"use strict";var r=e(59)(!0);e(31)(String,"String",function(t){this._t=String(t),this._i=0},function(){var t,n=this._t,e=this._i;return e>=n.length?{value:void 0,done:!0}:(t=r(n,e),this._i+=t.length,{value:t,done:!1})})},function(t,n,e){"use strict";var r=e(1),o=e(2),i=e(4),u=e(27),f=e(36),c=e(54).KEY,a=e(8),s=e(22),l=e(20),p=e(13),d=e(7),v=e(26),y=e(25),h=e(53),b=e(47),x=e(50),g=e(10),m=e(3),w=e(24),O=e(12),S=e(32),_=e(57),j=e(56),P=e(6),E=e(9),M=j.f,A=P.f,T=_.f,L=r.Symbol,N=r.JSON,C=N&&N.stringify,k="prototype",F=d("_hidden"),q=d("toPrimitive"),I={}.propertyIsEnumerable,B=s("symbol-registry"),D=s("symbols"),W=s("op-symbols"),H=Object[k],K="function"==typeof L,R=r.QObject,J=!R||!R[k]||!R[k].findChild,U=i&&a(function(){return 7!=S(A({},"a",{get:function(){return A(this,"a",{value:7}).a}})).a})?function(t,n,e){var r=M(H,n);r&&delete H[n],A(t,n,e),r&&t!==H&&A(H,n,r)}:A,G=function(t){var n=D[t]=S(L[k]);return n._k=t,n},$=K&&"symbol"==typeof L.iterator?function(t){return"symbol"==typeof t}:function(t){return t instanceof L},z=function(t,n,e){return t===H&&z(W,n,e),g(t),n=w(n,!0),g(e),o(D,n)?(e.enumerable?(o(t,F)&&t[F][n]&&(t[F][n]=!1),e=S(e,{enumerable:O(0,!1)})):(o(t,F)||A(t,F,O(1,{})),t[F][n]=!0),U(t,n,e)):A(t,n,e)},Y=function(t,n){g(t);for(var e,r=b(n=m(n)),o=0,i=r.length;i>o;)z(t,e=r[o++],n[e]);return t},Q=function(t,n){return void 0===n?S(t):Y(S(t),n)},X=function(t){var n=I.call(this,t=w(t,!0));return!(this===H&&o(D,t)&&!o(W,t))&&(!(n||!o(this,t)||!o(D,t)||o(this,F)&&this[F][t])||n)},V=function(t,n){if(t=m(t),n=w(n,!0),t!==H||!o(D,n)||o(W,n)){var e=M(t,n);return!e||!o(D,n)||o(t,F)&&t[F][n]||(e.enumerable=!0),e}},Z=function(t){for(var n,e=T(m(t)),r=[],i=0;e.length>i;)o(D,n=e[i++])||n==F||n==c||r.push(n);return r},tt=function(t){for(var n,e=t===H,r=T(e?W:m(t)),i=[],u=0;r.length>u;)!o(D,n=r[u++])||e&&!o(H,n)||i.push(D[n]);return i};K||(L=function(){if(this instanceof L)throw TypeError("Symbol is not a constructor!");var t=p(arguments.length>0?arguments[0]:void 0),n=function(e){this===H&&n.call(W,e),o(this,F)&&o(this[F],t)&&(this[F][t]=!1),U(this,t,O(1,e))};return i&&J&&U(H,t,{configurable:!0,set:n}),G(t)},f(L[k],"toString",function(){return this._k}),j.f=V,P.f=z,e(33).f=_.f=Z,e(19).f=X,e(34).f=tt,i&&!e(18)&&f(H,"propertyIsEnumerable",X,!0),v.f=function(t){return G(d(t))}),u(u.G+u.W+u.F*!K,{Symbol:L});for(var nt="hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables".split(","),et=0;nt.length>et;)d(nt[et++]);for(var nt=E(d.store),et=0;nt.length>et;)y(nt[et++]);u(u.S+u.F*!K,"Symbol",{for:function(t){return o(B,t+="")?B[t]:B[t]=L(t)},keyFor:function(t){if($(t))return h(B,t);throw TypeError(t+" is not a symbol!")},useSetter:function(){J=!0},useSimple:function(){J=!1}}),u(u.S+u.F*!K,"Object",{create:Q,defineProperty:z,defineProperties:Y,getOwnPropertyDescriptor:V,getOwnPropertyNames:Z,getOwnPropertySymbols:tt}),N&&u(u.S+u.F*(!K||a(function(){var t=L();return"[null]"!=C([t])||"{}"!=C({a:t})||"{}"!=C(Object(t))})),"JSON",{stringify:function(t){if(void 0!==t&&!$(t)){for(var n,e,r=[t],o=1;arguments.length>o;)r.push(arguments[o++]);return n=r[1],"function"==typeof n&&(e=n),!e&&x(n)||(n=function(t,n){if(e&&(n=e.call(this,t,n)),!$(n))return n}),r[1]=n,C.apply(N,r)}}}),L[k][q]||e(5)(L[k],q,L[k].valueOf),l(L,"Symbol"),l(Math,"Math",!0),l(r.JSON,"JSON",!0)},function(t,n,e){e(25)("asyncIterator")},function(t,n,e){e(25)("observable")},function(t,n,e){e(62);for(var r=e(1),o=e(5),i=e(17),u=e(7)("toStringTag"),f=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],c=0;c<5;c++){var a=f[c],s=r[a],l=s&&s.prototype;l&&!l[u]&&o(l,u,a),i[a]=i.Array}},function(t,n){"use strict";var e={versions:function(){var t=window.navigator.userAgent;return{trident:t.indexOf("Trident")>-1,presto:t.indexOf("Presto")>-1,webKit:t.indexOf("AppleWebKit")>-1,gecko:t.indexOf("Gecko")>-1&&t.indexOf("KHTML")==-1,mobile:!!t.match(/AppleWebKit.*Mobile.*/),ios:!!t.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),android:t.indexOf("Android")>-1||t.indexOf("Linux")>-1,iPhone:t.indexOf("iPhone")>-1||t.indexOf("Mac")>-1,iPad:t.indexOf("iPad")>-1,webApp:t.indexOf("Safari")==-1,weixin:t.indexOf("MicroMessenger")==-1}}()};t.exports=e},function(t,n,e){"use strict";function r(t){return t&&t.__esModule?t:{default:t}}var o=e(40),i=r(o),u=function(){function t(t,n,e){return n||e?String.fromCharCode(n||e):o[t]||t}function n(t){return l[t]}var e=/&quot;|&lt;|&gt;|&amp;|&nbsp;|&apos;|&#(\d+);|&#(\d+)/g,r=/['<> "&]/g,o={"&quot;":'"',"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" "},f=/\u00a0/g,c=/<br\s*\/?>/gi,a=/\r?\n/g,s=/\s/g,l={};for(var p in o)l[o[p]]=p;return o["&apos;"]="'",l["'"]="&#39;",{encode:function(t){return t?(""+t).replace(r,n).replace(a,"<br/>").replace(s,"&nbsp;"):""},decode:function(n){return n?(""+n).replace(c,"\n").replace(e,t).replace(f," "):""},encodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},encodeBase16forJSON:function(t){if(!t)return t;t=t.replace(/[\u4E00-\u9FBF]/gi,function(t){return escape(t).replace("%u","\\u")});for(var n=[],e=0,r=t.length;r>e;e++)n.push(t.charCodeAt(e).toString(16).toUpperCase());return n.join("")},decodeBase16:function(t){if(!t)return t;t+="";for(var n=[],e=0,r=t.length;r>e;e+=2)n.push(String.fromCharCode("0x"+t.slice(e,e+2)));return n.join("")},encodeObject:function(t){if(t instanceof Array)for(var n=0,e=t.length;e>n;n++)t[n]=u.encodeObject(t[n]);else if("object"==("undefined"==typeof t?"undefined":(0,i.default)(t)))for(var r in t)t[r]=u.encodeObject(t[r]);else if("string"==typeof t)return u.encode(t);return t},loadScript:function(t){var n=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(n),n.setAttribute("src",t)},addLoadEvent:function(t){var n=window.onload;"function"!=typeof window.onload?window.onload=t:window.onload=function(){n(),t()}}}}();t.exports=u},function(t,n){function e(t,n){t.classList?t.classList.add(n):t.className+=" "+n}t.exports=e},function(t,n){function e(t,n){if(t.classList)t.classList.remove(n);else{var e=new RegExp("(^|\\b)"+n.split(" ").join("|")+"(\\b|$)","gi");t.className=t.className.replace(e," ")}}t.exports=e},,,function(t,n){"use strict";function e(){var t=document.querySelector("#page-nav");if(t&&!document.querySelector("#page-nav .extend.prev")&&(t.innerHTML='<a class="extend prev disabled" rel="prev">&laquo; Prev</a>'+t.innerHTML),t&&!document.querySelector("#page-nav .extend.next")&&(t.innerHTML=t.innerHTML+'<a class="extend next disabled" rel="next">Next &raquo;</a>'),yiliaConfig&&yiliaConfig.open_in_new){var n=document.querySelectorAll(".article-entry a:not(.article-more-a)");n.forEach(function(t){var n=t.setAttribute("target");n&&""!==n||t.setAttribute("target","_blank")})}var e=document.querySelector("#js-aboutme");e&&0!==e.length&&(e.innerHTML=e.innerText)}t.exports={init:e}},,,,,,,,,function(t,n){function e(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var e=t.nextSibling;return e?t.parentNode.insertBefore(n,e):t.parentNode.appendChild(n)}t.exports=e}])</script><script src="/./main.05aabf.js"></script><script>!function(){var e=function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)};e("/slider.885efe.js")}()</script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-nav header-menu">
+    
+    
+      
+      
+      
+    
+      
+      
+      
+    
+    
+
+    <ul style="width: 80%">
+    
+    
+      
+      <li style="width: 50%" q-on="click: openSlider(e, 'innerArchive')"><a href="javascript:void(0)" q-class="active:innerArchive">ALL POST</a></li>
+      
+        
+      
+      <li style="width: 50%" q-on="click: openSlider(e, 'aboutme')"><a href="javascript:void(0)" q-class="active:aboutme">ABOUT ME</a></li>
+      
+        
+    </ul>
+  </div>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">FrontEnd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Translation</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Travel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Daily</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Thinking</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">mervynfang&lt;br&gt;&lt;br&gt;前端开发&lt;br&gt;&lt;br&gt;台风天的一次更新&lt;br&gt;心情不好也不坏&lt;br&gt;不喜欢赶</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
