@@ -5,7 +5,7 @@ tags: Daily
 valine: true
 ---
 
-本文链接: http://mervynfang.com/2017/11/14/201711/doubleeleven/
+本文链接: http://blog.mervynfang.com/2017/11/14/201711/doubleeleven/
 
 又是一年双十一之后了。
 

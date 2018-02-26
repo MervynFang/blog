@@ -5,7 +5,7 @@ tags: [FrontEnd]
 valine: true
 ---
 
-本文链接: http://mervynfang.com/2017/04/17/201704/Vue-UI-Framework-%E5%AF%B9%E6%AF%94/
+本文链接: http://blog.mervynfang.com/2017/04/17/201704/Vue-UI-Framework-%E5%AF%B9%E6%AF%94/
 
 Vue 2.0 正式版之后，基于 1.x 的许多 Vue UI 框架都做了更新，以适配 Vue 2.x。当然其中也有一些并没有做升级，仍然只兼容 Vue 1.x。其中包括 vue UI 组件开始得比较早的 [VueStrap](https://github.com/yuche/vue-strap "VueStrap") （基于 bootsrap 的 UI 组件 ），还有 [vue-antd](https://github.com/okoala/vue-antd "vue-antd")（基于 ant-design），[vue-desktop](https://github.com/ElemeFE/vue-desktop "vue-desktop")等。
 
