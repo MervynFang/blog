@@ -5,34 +5,37 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="//mervynfang.com">
+  <link rel="dns-prefetch" href="//blog.mervynfang.com">
   <title>【译】Node.js, TC-39, 和模块 | mervynfang</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+  <meta name="description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/esmodule/
 原文标题: Node.js, TC-39, and Modules
 作者: James M Snell
-原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e
+这周我第一次参加 T">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【译】Node.js, TC-39, 和模块">
-<meta property="og:url" content="//mervynfang.com/2017/08/17/201708/Node-js-TC-39-和模块/index.html">
+<meta property="og:url" content="//blog.mervynfang.com/2017/08/17/201708/esmodule/index.html">
 <meta property="og:site_name" content="mervynfang">
-<meta property="og:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+<meta property="og:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/esmodule/
 原文标题: Node.js, TC-39, and Modules
 作者: James M Snell
-原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
-<meta property="og:image" content="//mervynfang.com/assets/static/201708/1.png">
-<meta property="og:image" content="//mervynfang.com/assets/static/201708/2.png">
-<meta property="og:image" content="//mervynfang.com/assets/static/201708/3.png">
-<meta property="og:image" content="//mervynfang.com/assets/static/201708/4.png">
-<meta property="og:image" content="//mervynfang.com/assets/static/201708/5.png">
-<meta property="og:updated_time" content="2018-02-26T18:27:01.664Z">
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e
+这周我第一次参加 T">
+<meta property="og:image" content="//blog.mervynfang.com/assets/static/201708/1.png">
+<meta property="og:image" content="//blog.mervynfang.com/assets/static/201708/2.png">
+<meta property="og:image" content="//blog.mervynfang.com/assets/static/201708/3.png">
+<meta property="og:image" content="//blog.mervynfang.com/assets/static/201708/4.png">
+<meta property="og:image" content="//blog.mervynfang.com/assets/static/201708/5.png">
+<meta property="og:updated_time" content="2018-06-24T15:39:57.779Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【译】Node.js, TC-39, 和模块">
-<meta name="twitter:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+<meta name="twitter:description" content="本文链接: http://blog.mervynfang.com/2017/08/17/201708/esmodule/
 原文标题: Node.js, TC-39, and Modules
 作者: James M Snell
-原文链接: https://medium.com/hacker-daily/node-js-tc-39-an">
-<meta name="twitter:image" content="//mervynfang.com/assets/static/201708/1.png">
+原文链接: https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e
+这周我第一次参加 T">
+<meta name="twitter:image" content="//blog.mervynfang.com/assets/static/201708/1.png">
   
     <link rel="alternative" href="/atom.xml" title="mervynfang" type="application/atom+xml">
   
@@ -182,7 +185,7 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-201708/Node-js-TC-39-和模块" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-201708/esmodule" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -194,7 +197,7 @@
   
 
         
-        <a href="/2017/08/17/201708/Node-js-TC-39-和模块/" class="archive-article-date">
+        <a href="/2017/08/17/201708/esmodule/" class="archive-article-date">
   	<time datetime="2017-08-17T03:40:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-17</time>
 </a>
         
@@ -202,7 +205,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文链接: <a href="http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/" target="_blank" rel="external">http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/</a></p>
+        <p>本文链接: <a href="http://blog.mervynfang.com/2017/08/17/201708/esmodule/" target="_blank" rel="external">http://blog.mervynfang.com/2017/08/17/201708/esmodule/</a></p>
 <p>原文标题: Node.js, TC-39, and Modules</p>
 <p>作者: James M Snell</p>
 <p>原文链接: <a href="https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e" target="_blank" rel="external">https://medium.com/hacker-daily/node-js-tc-39-and-modules-a1118aecf95e</a></p>
@@ -344,57 +347,6 @@
       
 
       
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://mervynfang.com/2017/08/17/201708/Node-js-TC-39-和模块/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
       <div class="clearfix"></div>
     </div>
   </div>
@@ -403,7 +355,7 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/08/30/201708/旅行的意义/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/30/201708/travel/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -413,7 +365,7 @@
     </a>
   
   
-    <a href="/2017/04/17/201704/Vue-UI-Framework-对比/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/04/17/201704/vueframework/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">Vue UI Framework 对比</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -531,11 +483,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Travel</a>
+                <a href="javascript:void(0)" class="js-tag color1">Daily</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Daily</a>
+                <a href="javascript:void(0)" class="js-tag color4">Thinking</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,7 +499,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Thinking</a>
+                <a href="javascript:void(0)" class="js-tag color2">Travel</a>
               </li>
             
             <div class="clearfix"></div>
