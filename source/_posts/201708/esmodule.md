@@ -1,11 +1,13 @@
 ---
 title: '【译】Node.js, TC-39, 和模块'
 date: 2017-08-17 11:40:40
-tags: [FrontEnd, Translation]
+tags: 
+  - FrontEnd
+  - Translation
 valine: true
 ---
 
-本文链接: http://blog.mervynfang.com/2017/08/17/201708/Node-js-TC-39-%E5%92%8C%E6%A8%A1%E5%9D%97/
+本文链接: http://blog.mervynfang.com/2017/08/17/201708/esmodule/
 
 原文标题: Node.js, TC-39, and Modules
 

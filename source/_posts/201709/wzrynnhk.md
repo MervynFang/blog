@@ -1,7 +1,9 @@
 ---
 title: '王者荣耀，那年花开月正圆以及High Sierra'
 date: 2017-09-30 10:52:33
-tags: [Daily, Thinking]
+tags: 
+ - Daily
+ - Thinking
 valine: true
 ---
 
